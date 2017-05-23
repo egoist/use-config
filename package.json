@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "test": "jest && npm run lint",
-    "test:cov": "jest --coverafe && npm run lint",
+    "test:cov": "jest --coverage && npm run lint",
     "lint": "xo"
   },
   "author": "egoist <0x142857@gmail.com>",
