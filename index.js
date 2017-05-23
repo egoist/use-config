@@ -6,12 +6,6 @@ const loadJsonFile = require('load-json-file')
 
 module.exports = class UseConfig {
   constructor(options = {}) {
-    if (typeof options.name !== 'string') {
-      return Promise.reject(
-        new TypeError('[use-config] Expect "name" to be a string')
-      )
-    }
-
     this.options = Object.assign(
       {
         cwd: process.cwd(),
@@ -42,6 +36,12 @@ module.exports = class UseConfig {
   }
 
   load() {
+    if (typeof this.options.name !== 'string') {
+      return Promise.reject(
+        new TypeError('[use-config] Expect "name" to be a string')
+      )
+    }
+
     const fallbackLoader = filepath => loadJsonFile(filepath)
 
     return series(

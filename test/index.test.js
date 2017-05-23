@@ -60,3 +60,11 @@ test('custom files', () => {
     })
   })
 })
+
+test('no name', () => {
+  expect.assertions(1)
+  const useConfig = new UseConfig()
+  return useConfig
+    .load()
+    .catch(err => expect(err.message).toMatch('Expect "name" to be a string'))
+})
