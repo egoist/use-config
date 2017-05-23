@@ -1,6 +1,6 @@
 {
   "name": "use-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use a config file in your project.",
   "repository": {
     "url": "egoist/use-config",
