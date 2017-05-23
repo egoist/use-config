@@ -1,0 +1,40 @@
+{
+  "name": "use-config",
+  "version": "0.0.0",
+  "description": "Use a config file in your project.",
+  "repository": {
+    "url": "egoist/use-config",
+    "type": "git"
+  },
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "test": "jest && npm run lint",
+    "test:cov": "jest --coverafe && npm run lint",
+    "lint": "xo"
+  },
+  "author": "egoist <0x142857@gmail.com>",
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "fs-extra": "^3.0.1",
+    "path-exists": "^3.0.0",
+    "promise.series": "^0.2.0",
+    "pupa": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint-config-rem": "^3.0.0",
+    "jest-cli": "^19.0.0",
+    "xo": "^0.18.0"
+  },
+  "xo": {
+    "extends": "rem/prettier",
+    "envs": [
+      "jest"
+    ]
+  }
+}
