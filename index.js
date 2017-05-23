@@ -1,8 +1,8 @@
 const { resolve } = require('path')
-const fs = require('fs-extra')
 const pupa = require('pupa')
 const series = require('promise.series')
 const pathExists = require('path-exists')
+const loadJsonFile = require('load-json-file')
 
 module.exports = class UseConfig {
   constructor(options) {
@@ -33,18 +33,16 @@ module.exports = class UseConfig {
 
     if (!this.hasJSLoader) {
       this.hasJSLoader = true
-      this.addLoader(/\.(js|json)$/, filepath => {
-        const content = require(filepath)
-        if (/package\.json$/.test(filepath)) {
-          return content[name]
-        }
-        return content
-      })
+      this.addLoader(/\.js$/, filepath => require(filepath))
+      this.addLoader(/\.json$/, filepath =>
+        loadJsonFile(filepath).then(json => {
+          if (/package\.json$/.test(filepath)) return json[name]
+          return json
+        })
+      )
     }
 
-    const defaultLoader = filepath => {
-      return fs.readFile(filepath, 'utf8').then(content => JSON.parse(content))
-    }
+    const fallbackLoader = filepath => loadJsonFile(filepath)
 
     return series(
       this.options.files.map(_file => {
@@ -57,7 +55,7 @@ module.exports = class UseConfig {
           return pathExists(filepath).then(exists => {
             if (!exists) return result
 
-            const loader = this.findLoader(filepath) || defaultLoader
+            const loader = this.findLoader(filepath) || fallbackLoader
             return Promise.resolve()
               .then(() => loader(filepath))
               .then(config => ({

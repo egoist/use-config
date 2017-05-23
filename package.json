@@ -24,7 +24,7 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "fs-extra": "^3.0.1",
+    "load-json-file": "^2.0.0",
     "path-exists": "^3.0.0",
     "promise.series": "^0.2.0",
     "pupa": "^1.0.0"
