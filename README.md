@@ -74,7 +74,7 @@ By default all `.js` files will be loaded via `require` and all other files will
 Type: `string`<br>
 Required: `true`
 
-The config name, for `name: 'poi'` default files `['{name}.config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
+The config name, for `name: 'poi'` and `files: ['{name}.config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
 
 ### useConfig.addLoader(test, loader)
 
