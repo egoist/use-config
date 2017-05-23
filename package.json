@@ -10,6 +10,9 @@
   "files": [
     "index.js"
   ],
+  "engines": {
+    "node": ">=6"
+  },
   "scripts": {
     "test": "jest && npm run lint",
     "test:cov": "jest --coverage && npm run lint",
