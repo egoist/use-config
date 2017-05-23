@@ -57,7 +57,7 @@ Default: `['{name}.config.js', 'package.json']`
 
 The files to search in order, when it's `package.json`, we return the `name` property of it.
 
-##### cwd
+##### options.cwd
 
 Default: `process.cwd()`
 
