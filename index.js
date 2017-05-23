@@ -56,8 +56,7 @@ module.exports = class UseConfig {
             if (!exists) return result
 
             const loader = this.findLoader(filepath) || fallbackLoader
-            return Promise.resolve()
-              .then(() => loader(filepath))
+            return Promise.resolve(loader(filepath))
               .then(config => ({
                 path: filepath,
                 config
