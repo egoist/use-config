@@ -13,12 +13,12 @@ yarn add use-config
 ```js
 const UseConfig = require('use-config')
 
-const useConfig = new UseConfig()
-
 // Find config in order:
 // poi.config.js
 // package.json's poi property
-useConfig.load('poi').then(res => {
+const useConfig = new UseConfig({ name: 'poi' })
+
+useConfig.load().then(res => {
   res.path // path to found config
   res.config // content of config
 
@@ -35,6 +35,7 @@ You can also specific the files we need to look for:
 ```js
 // To make it use poi.config.js and .poirc and poi.config.yml only
 const useConfig = new UseConfig({
+  name: 'poi',
   files: ['{name}.config.js', '.{name}rc', '{name}.config.yml']
 })
 
@@ -42,7 +43,7 @@ const useConfig = new UseConfig({
 // But you can use custom loader for specific extension
 useConfig.addLoader(/\.yml$/, filepath => parseYamlFile(filepath))
 
-useConfig.load('poi').then(res => {/* ... */})
+useConfig.load().then(res => {/* ... */})
 ```
 
 ## API
@@ -50,6 +51,13 @@ useConfig.load('poi').then(res => {/* ... */})
 ### new UseConfig([options])
 
 #### options
+
+##### options.name
+
+Type: `string`<br>
+Required: `true`
+
+The config name, for `name: 'poi'` and `files: ['{name}.config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
 
 ##### options.files
 
@@ -63,18 +71,11 @@ Default: `process.cwd()`
 
 The path to search files.
 
-### useConfig.load(name)
+### useConfig.load()
 
 Return a Promise.
 
 By default all `.js` files will be loaded via `require` and all other files will be treated as JSON format which is load using `fs` and `JSON.parse`.
-
-#### name
-
-Type: `string`<br>
-Required: `true`
-
-The config name, for `name: 'poi'` and `files: ['{name}.config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
 
 ### useConfig.addLoader(test, loader)
 

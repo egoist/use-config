@@ -5,7 +5,13 @@ const pathExists = require('path-exists')
 const loadJsonFile = require('load-json-file')
 
 module.exports = class UseConfig {
-  constructor(options) {
+  constructor(options = {}) {
+    if (typeof options.name !== 'string') {
+      return Promise.reject(
+        new TypeError('[use-config] Expect "name" to be a string')
+      )
+    }
+
     this.options = Object.assign(
       {
         cwd: process.cwd(),
@@ -13,7 +19,18 @@ module.exports = class UseConfig {
       },
       options
     )
-    this.loaders = []
+
+    this.loaders = [
+      { test: /\.js$/, loader: filepath => require(filepath) },
+      {
+        test: /\.json$/,
+        loader: filepath =>
+          loadJsonFile(filepath).then(json => {
+            if (/package\.json$/.test(filepath)) return json[this.options.name]
+            return json
+          })
+      }
+    ]
   }
 
   addLoader(test, loader) {
@@ -24,24 +41,7 @@ module.exports = class UseConfig {
     return this
   }
 
-  load(name) {
-    if (typeof name !== 'string') {
-      return Promise.reject(
-        new TypeError('[use-config] Expect "name" to be a string')
-      )
-    }
-
-    if (!this.hasJSLoader) {
-      this.hasJSLoader = true
-      this.addLoader(/\.js$/, filepath => require(filepath))
-      this.addLoader(/\.json$/, filepath =>
-        loadJsonFile(filepath).then(json => {
-          if (/package\.json$/.test(filepath)) return json[name]
-          return json
-        })
-      )
-    }
-
+  load() {
     const fallbackLoader = filepath => loadJsonFile(filepath)
 
     return series(
@@ -50,7 +50,7 @@ module.exports = class UseConfig {
           // Pass this action when config is already retrived
           if (result.path && result.config) return result
 
-          const file = pupa(_file, { name })
+          const file = pupa(_file, { name: this.options.name })
           const filepath = resolve(this.options.cwd, file)
           return pathExists(filepath).then(exists => {
             if (!exists) return result
