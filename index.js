@@ -31,13 +31,16 @@ module.exports = class UseConfig {
       )
     }
 
-    this.addLoader(/\.(js|json)$/, filepath => {
-      const content = require(filepath)
-      if (/package\.json$/.test(filepath)) {
-        return content[name]
-      }
-      return content
-    })
+    if (!this.hasJSLoader) {
+      this.hasJSLoader = true
+      this.addLoader(/\.(js|json)$/, filepath => {
+        const content = require(filepath)
+        if (/package\.json$/.test(filepath)) {
+          return content[name]
+        }
+        return content
+      })
+    }
 
     const defaultLoader = filepath => {
       return fs.readFile(filepath, 'utf8').then(content => JSON.parse(content))
