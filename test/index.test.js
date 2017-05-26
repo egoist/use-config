@@ -68,3 +68,12 @@ test('no name', () => {
     .load()
     .catch(err => expect(err.message).toMatch('Expect "name" to be a string'))
 })
+
+test('has package.json but no specific property', () => {
+  const cwd = path.resolve('fixtures/package-json-no-property')
+  const useConfig = new UseConfig({ cwd, name: 'hi' })
+
+  return useConfig.load().then(res => {
+    expect(res).toEqual({})
+  })
+})

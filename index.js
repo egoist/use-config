@@ -56,10 +56,16 @@ module.exports = class UseConfig {
             if (!exists) return result
 
             const loader = this.findLoader(filepath) || fallbackLoader
-            return Promise.resolve(loader(filepath)).then(config => ({
-              path: filepath,
-              config
-            }))
+            return Promise.resolve(loader(filepath)).then(config => {
+              // When config is falsy
+              // We think it's an invalid config file
+              return config
+                ? {
+                    path: filepath,
+                    config
+                  }
+                : {}
+            })
           })
         }
       }),
