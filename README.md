@@ -46,6 +46,10 @@ useConfig.addLoader(/\.yml$/, filepath => parseYamlFile(filepath))
 useConfig.load().then(res => {/* ... */})
 ```
 
+> **NOTE:** 
+>
+> when config value is falsy, we will ignore it. For example, you have a `package.json` but `pkg.configName` does not exist.
+
 ## API
 
 ### new UseConfig([options])
