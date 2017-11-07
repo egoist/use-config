@@ -15,7 +15,13 @@ module.exports = class UseConfig {
     )
 
     this.loaders = [
-      { test: /\.js$/, loader: filepath => require(filepath) },
+      {
+        test: /\.js$/,
+        loader: filepath => {
+          delete require.cache[filepath]
+          return require(filepath)
+        }
+      },
       {
         test: /\.json$/,
         loader: filepath =>
@@ -56,6 +62,7 @@ module.exports = class UseConfig {
             if (!exists) return result
 
             const loader = this.findLoader(filepath) || fallbackLoader
+
             return Promise.resolve(loader(filepath)).then(config => {
               // When config is falsy
               // We think it's an invalid config file
