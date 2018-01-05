@@ -75,11 +75,29 @@ Default: `process.cwd()`
 
 The path to search files.
 
+##### options.fallbackLoader
+
+Type: `function`
+
+A fallback loader for non-js files, by default we load it with `load-json-file`:
+
+```js
+function fallbackLoader(filepath) {
+  return this.options.sync ? loadJsonFile.sync(filepath) : loadJsonFile(file)
+}
+```
+
 ### useConfig.load()
 
-Return a Promise.
+Return: A Promise which resolves to `{ path, config } or `{}` when no config file was found.
 
 By default all `.js` files will be loaded via `require` and all other files will be treated as JSON format which is load using `fs` and `JSON.parse`.
+
+### useConfig.loadSync()
+
+Return: `{ path, config }` or `{}` when no config file was found.
+
+To use `.loadSync()` method you should ensure all custom loaders added via `.addLoader()` supports this.
 
 ### useConfig.addLoader(test, loader)
 
@@ -96,6 +114,16 @@ Type: `function`<br>
 Required: `true`
 
 The function to get file content. Either synchronus or returns a Promise.
+
+If you're using the `.loadSync()` method please ensure it performs no async operations when `this.sync === true`:
+
+```js
+function yamlLoader(filepath) {
+  return this.sync ? yaml.loadSync(filepath) : yaml.load(filepath)
+}
+```
+
+Note that you can't use `arrow function` here since you need access to `this`.
 
 ## Contributing
 
