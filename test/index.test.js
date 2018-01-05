@@ -1,5 +1,5 @@
-const path = require('path')
-const UseConfig = require('../src')
+import path from 'path'
+import UseConfig from '../src'
 
 function fixtures(...args) {
   return path.join(__dirname, 'fixtures', ...args)
