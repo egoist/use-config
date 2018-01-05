@@ -10,13 +10,19 @@ describe('no config file', () => {
 
   test('async', () => {
     return useConfig.load().then(res => {
-      expect(res).toEqual({})
+      expect(res).toEqual({
+        path: path.resolve('package.json'),
+        config: undefined
+      })
     })
   })
 
   test('sync', () => {
     const res = useConfig.loadSync()
-    expect(res).toEqual({})
+    expect(res).toEqual({
+      path: path.resolve('package.json'),
+      config: undefined
+    })
   })
 })
 
@@ -68,14 +74,11 @@ describe('package.json property', () => {
 })
 
 describe('custom files', () => {
-  // It contains package.json and .hirc
-  // But package.json does not have a `hi` property
-  // So it will still read .hirc
   const cwd = fixtures('custom-files')
   const useConfig = new UseConfig({
     cwd,
     name: 'hi',
-    files: ['{name}.config.js', 'package.json', '.{name}rc']
+    files: ['{name}.config.js', '.{name}rc']
   })
 
   test('async', () => {
@@ -105,18 +108,59 @@ test('no name', () => {
   }
 })
 
-describe('has package.json but no specific property', () => {
-  const cwd = fixtures('package-json-no-property')
-  const useConfig = new UseConfig({ cwd, name: 'hi' })
+// While package.json is found but does not have `hi` property
+// It still searches next file
+// This only works with package.json
+describe('continue when name does not exist in package.json', () => {
+  describe('has next file', () => {
+    const cwd = fixtures('package-json-no-property')
+    const useConfig = new UseConfig({
+      cwd,
+      name: 'hi',
+      files: ['{name}.config.js', 'package.json', '.hirc']
+    })
 
-  test('async', () => {
-    return useConfig.load().then(res => {
-      expect(res).toEqual({})
+    test('async', () => {
+      return useConfig.load().then(res => {
+        expect(res).toEqual({
+          path: path.join(cwd, '.hirc'),
+          config: { foo: 'foo' }
+        })
+      })
+    })
+
+    test('sync', () => {
+      const res = useConfig.loadSync()
+      expect(res).toEqual({
+        path: path.join(cwd, '.hirc'),
+        config: { foo: 'foo' }
+      })
     })
   })
 
-  test('sync', () => {
-    const res = useConfig.loadSync()
-    expect(res).toEqual({})
+  describe('is last file', () => {
+    const cwd = fixtures('package-json-no-property')
+    const useConfig = new UseConfig({
+      cwd,
+      name: 'hi',
+      files: ['{name}.config.js', 'sss', 'package.json']
+    })
+
+    test('async', () => {
+      return useConfig.load().then(res => {
+        expect(res).toEqual({
+          path: path.join(cwd, 'package.json'),
+          config: undefined
+        })
+      })
+    })
+
+    test('sync', () => {
+      const res = useConfig.loadSync()
+      expect(res).toEqual({
+        path: path.join(cwd, 'package.json'),
+        config: undefined
+      })
+    })
   })
 })

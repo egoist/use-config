@@ -23,7 +23,9 @@ useConfig.load().then(res => {
   res.config // content of config
 
   if (!res.path) {
-    // config file is not found
+    // Config file is not found
+    // If the found config file is `package.json`
+    // You should also check if res.config is undefined
   }
 }).catch(err => {
   // maybe a parse error
@@ -48,7 +50,7 @@ useConfig.load().then(res => {/* ... */})
 
 > **NOTE:** 
 >
-> when config value is falsy, we will ignore it. For example, you have a `package.json` but `pkg.configName` does not exist.
+> when config value is `undefined`, we will ignore it and find next file. For example, you have a `package.json` but `pkg[name]` does not exist. If it's the last file that we can find, we will return `{ path, config: undefined }`.
 
 ## API
 
@@ -99,7 +101,7 @@ Return: `{ path, config }` or `{}` when no config file was found.
 
 To use `.loadSync()` method you should ensure all custom loaders added via `.addLoader()` supports this.
 
-### useConfig.addLoader(test, loader)
+### useConfig.addLoader({ test, loader })
 
 #### test
 

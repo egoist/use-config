@@ -50,20 +50,19 @@ module.exports = class UseConfig {
     ]
   }
 
-  addLoader(test, loader) {
-    this.loaders.push({
-      test,
-      loader
-    })
+  addLoader(loader) {
+    this.loaders.push(loader)
     return this
   }
 
   async load() {
     const loaderContext = this.getLoaderContext({ sync: false })
+
     for (const [index, _filename] of this.options.files.entries()) {
       const isLast = index === this.options.files.length - 1
       const filename = pupa(_filename, { name: this.options.name })
       const filepath = resolve(this.options.cwd, filename)
+
       if (!await pathExists(filepath)) {
         if (isLast) {
           return {}
@@ -72,13 +71,21 @@ module.exports = class UseConfig {
       }
       const loader = this.findLoader(filepath)
       const config = await loader.call(loaderContext, filepath)
-      if (!config) {
+
+      if (typeof config === 'undefined') {
         if (isLast) {
-          return {}
+          return {
+            path: filepath,
+            config
+          }
         }
         continue
       }
-      return config ? { config, path: filepath } : {}
+
+      return {
+        config,
+        path: filepath
+      }
     }
   }
 
@@ -96,18 +103,24 @@ module.exports = class UseConfig {
       }
       const loader = this.findLoader(filepath)
       const config = loader.call(loaderContext, filepath)
-      if (!config) {
+
+      if (typeof config === 'undefined') {
         if (isLast) {
-          return {}
+          return {
+            path: filepath,
+            config
+          }
         }
         continue
       }
+
       if (config.then) {
         throw new Error(
           `[use-config] You're using the .loadSync method but the loader returns a Promise!`
         )
       }
-      return config ? { config, path: filepath } : {}
+
+      return { config, path: filepath }
     }
   }
 
