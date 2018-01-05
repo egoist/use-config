@@ -85,7 +85,7 @@ A fallback loader for non-js files, by default we load it with `load-json-file`:
 
 ```js
 function fallbackLoader(filepath) {
-  return this.options.sync ? loadJsonFile.sync(filepath) : loadJsonFile(file)
+  return this.sync ? loadJsonFile.sync(filepath) : loadJsonFile(file)
 }
 ```
 
