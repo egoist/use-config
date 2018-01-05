@@ -1,10 +1,10 @@
-const { resolve } = require('path')
-const fs = require('fs')
-const pupa = require('pupa')
-const pathExists = require('path-exists')
-const loadJsonFile = require('load-json-file')
+import { resolve } from 'path'
+import fs from 'fs'
+import pupa from 'pupa'
+import pathExists from 'path-exists'
+import loadJsonFile from 'load-json-file'
 
-module.exports = class UseConfig {
+export default class UseConfig {
   constructor(options = {}) {
     this.options = Object.assign(
       {
