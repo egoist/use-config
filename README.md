@@ -91,7 +91,7 @@ function fallbackLoader(filepath) {
 
 ### useConfig.load()
 
-Return: A Promise which resolves to `{ path, config } or `{}` when no config file was found.
+Return: A Promise which resolves to `{ path, config }` or `{}` when no config file was found.
 
 By default all `.js` files will be loaded via `require` and all other files will be treated as JSON format which is load using `fs` and `JSON.parse`.
 
