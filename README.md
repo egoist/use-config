@@ -32,7 +32,7 @@ useConfig.load().then(res => {
 })
 ```
 
-You can also specific the files we need to look for:
+You can also specify the files we need to look for:
 
 ```js
 // To make it use poi.config.js and .poirc and poi.config.yml only
