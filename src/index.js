@@ -69,8 +69,9 @@ export default class UseConfig {
         }
         continue
       }
-      const loader = this.findLoader(filepath)
-      const config = await loader.call(loaderContext, filepath)
+      const loader = async (...args) =>
+        this.findLoader(filepath).call(loaderContext, ...args)
+      const config = await loader(filepath)
 
       if (typeof config === 'undefined') {
         if (isLast) {
