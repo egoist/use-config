@@ -1,8 +1,10 @@
-import { resolve } from 'path'
+import { basename, resolve } from 'path'
 import fs from 'fs'
 import pupa from 'pupa'
 import pathExists from 'path-exists'
 import loadJsonFile from 'load-json-file'
+
+const isPkg = filepath => basename(filepath) === 'package.json'
 
 export default class UseConfig {
   constructor(options = {}) {
@@ -75,10 +77,12 @@ export default class UseConfig {
 
       if (typeof config === 'undefined') {
         if (isLast) {
-          return {
-            path: filepath,
-            config
-          }
+          return isPkg(filepath)
+            ? {}
+            : {
+                path: filepath,
+                config
+              }
         }
         continue
       }
@@ -107,10 +111,12 @@ export default class UseConfig {
 
       if (typeof config === 'undefined') {
         if (isLast) {
-          return {
-            path: filepath,
-            config
-          }
+          return isPkg(filepath)
+            ? {}
+            : {
+                path: filepath,
+                config
+              }
         }
         continue
       }

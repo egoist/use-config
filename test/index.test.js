@@ -10,19 +10,13 @@ describe('no config file', () => {
 
   test('async', () => {
     return useConfig.load().then(res => {
-      expect(res).toEqual({
-        path: path.resolve('package.json'),
-        config: undefined
-      })
+      expect(res).toEqual({})
     })
   })
 
   test('sync', () => {
     const res = useConfig.loadSync()
-    expect(res).toEqual({
-      path: path.resolve('package.json'),
-      config: undefined
-    })
+    expect(res).toEqual({})
   })
 })
 
@@ -148,19 +142,13 @@ describe('continue when name does not exist in package.json', () => {
 
     test('async', () => {
       return useConfig.load().then(res => {
-        expect(res).toEqual({
-          path: path.join(cwd, 'package.json'),
-          config: undefined
-        })
+        expect(res).toEqual({})
       })
     })
 
     test('sync', () => {
       const res = useConfig.loadSync()
-      expect(res).toEqual({
-        path: path.join(cwd, 'package.json'),
-        config: undefined
-      })
+      expect(res).toEqual({})
     })
   })
 })
