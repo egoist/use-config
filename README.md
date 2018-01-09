@@ -24,8 +24,6 @@ useConfig.load().then(res => {
 
   if (!res.path) {
     // Config file is not found
-    // If the found config file is `package.json`
-    // You should also check if res.config is undefined
   }
 }).catch(err => {
   // maybe a parse error

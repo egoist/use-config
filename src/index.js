@@ -37,8 +37,7 @@ export default class UseConfig {
         test: /\.json$/,
         loader: filepath => {
           const parseJson = (filepath, content) => {
-            if (/package\.json$/.test(filepath))
-              return content[this.options.name]
+            if (isPkg(filepath)) return content[this.options.name]
             return content
           }
           if (this.options.sync) {
@@ -76,15 +75,16 @@ export default class UseConfig {
       const config = await loader(filepath)
 
       if (typeof config === 'undefined') {
-        if (isLast) {
-          return isPkg(filepath)
-            ? {}
-            : {
-                path: filepath,
-                config
-              }
+        if (isPkg(filepath)) {
+          if (isLast) {
+            return {}
+          }
+          continue
         }
-        continue
+        return {
+          path: filepath,
+          config
+        }
       }
 
       return {
@@ -110,15 +110,19 @@ export default class UseConfig {
       const config = loader.call(loaderContext, filepath)
 
       if (typeof config === 'undefined') {
-        if (isLast) {
-          return isPkg(filepath)
-            ? {}
-            : {
-                path: filepath,
-                config
-              }
+        // When `config` is undefined
+        // We should only continue searching next file
+        // If current file is `package.json`
+        if (isPkg(filepath)) {
+          if (isLast) {
+            return {}
+          }
+          continue
         }
-        continue
+        return {
+          path: filepath,
+          config
+        }
       }
 
       if (config.then) {

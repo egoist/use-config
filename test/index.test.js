@@ -152,3 +152,33 @@ describe('continue when name does not exist in package.json', () => {
     })
   })
 })
+
+describe('do not continue when file exists but config is undefined', () => {
+  const cwd = fixtures('do-not-continue')
+  const useConfig = new UseConfig({
+    cwd,
+    name: 'foo',
+    files: ['{name}.config.js', 'sss', 'package.json']
+  })
+  useConfig.addLoader({
+    test: /sss$/,
+    loader: () => undefined
+  })
+
+  test('async', () => {
+    return useConfig.load().then(res => {
+      expect(res).toEqual({
+        path: path.join(cwd, 'sss'),
+        config: undefined
+      })
+    })
+  })
+
+  test('sync', () => {
+    const res = useConfig.loadSync()
+    expect(res).toEqual({
+      path: path.join(cwd, 'sss'),
+      config: undefined
+    })
+  })
+})
