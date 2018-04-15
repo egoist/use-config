@@ -2,6 +2,8 @@
 
 [![NPM version](https://img.shields.io/npm/v/use-config.svg?style=flat)](https://npmjs.com/package/use-config) [![NPM downloads](https://img.shields.io/npm/dm/use-config.svg?style=flat)](https://npmjs.com/package/use-config) [![CircleCI](https://circleci.com/gh/egoist/use-config/tree/master.svg?style=shield)](https://circleci.com/gh/egoist/use-config/tree/master) [![codecov](https://codecov.io/gh/egoist/use-config/branch/master/graph/badge.svg)](https://codecov.io/gh/egoist/use-config)  [![donate](https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&style=flat)](https://github.com/egoist/donate)
 
+Note: this project is deprecated but I still maintain it in case any critical bugs, for an alternative please see [JoyCon](https://github.com/egoist/joycon).
+
 ## Install
 
 ```bash
