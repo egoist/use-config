@@ -48,7 +48,7 @@ useConfig.load().then(res => {/* ... */})
 
 > **NOTE:** 
 >
-> when config value is `undefined`, we will ignore it and find next file. For example, you have a `package.json` but `pkg[name]` does not exist. If it's the last file that we can find, we will return `{ path, config: undefined }`.
+> For `package.json`, when config value is `undefined`, we will ignore it and find next file. For example, you have a `package.json` but `pkg[name]` does not exist. If it's the last file that we can find, we will return `{}`.
 
 ## API
 
