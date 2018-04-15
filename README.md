@@ -36,7 +36,7 @@ You can also specify the files we need to look for:
 // To make it use poi.config.js and .poirc and poi.config.yml only
 const useConfig = new UseConfig({
   name: 'poi',
-  files: ['{name}.config.js', '.{name}rc', '{name}.config.yml']
+  files: ['[name].config.js', '.[name]rc', '[name].config.yml']
 })
 
 // By default all non-js file will be treated as JSON
@@ -61,11 +61,11 @@ useConfig.load().then(res => {/* ... */})
 Type: `string`<br>
 Required: `true`
 
-The config name, for `name: 'poi'` and `files: ['{name}.config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
+The config name, for `name: 'poi'` and `files: ['[name].config.js', 'package.json']`, it will search `poi.config.js` and `poi` property in `package.json`.
 
 ##### options.files
 
-Default: `['{name}.config.js', 'package.json']`
+Default: `['[name].config.js', 'package.json']`
 
 The files to search in order, when it's `package.json`, we return the `name` property of it.
 

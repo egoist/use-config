@@ -72,7 +72,7 @@ describe('custom files', () => {
   const useConfig = new UseConfig({
     cwd,
     name: 'hi',
-    files: ['{name}.config.js', '.{name}rc']
+    files: ['[name].config.js', '.[name]rc']
   })
 
   test('async', () => {
@@ -111,7 +111,7 @@ describe('continue when name does not exist in package.json', () => {
     const useConfig = new UseConfig({
       cwd,
       name: 'hi',
-      files: ['{name}.config.js', 'package.json', '.hirc']
+      files: ['[name].config.js', 'package.json', '.hirc']
     })
 
     test('async', () => {
@@ -137,7 +137,7 @@ describe('continue when name does not exist in package.json', () => {
     const useConfig = new UseConfig({
       cwd,
       name: 'hi',
-      files: ['{name}.config.js', 'sss', 'package.json']
+      files: ['[name].config.js', 'sss', 'package.json']
     })
 
     test('async', () => {
@@ -158,7 +158,7 @@ describe('do not continue when file exists but config is undefined', () => {
   const useConfig = new UseConfig({
     cwd,
     name: 'foo',
-    files: ['{name}.config.js', 'sss', 'package.json']
+    files: ['[name].config.js', 'sss', 'package.json']
   })
   useConfig.addLoader({
     test: /sss$/,

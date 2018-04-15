@@ -1,8 +1,8 @@
 import { basename, resolve } from 'path'
 import fs from 'fs'
-import pupa from 'pupa'
 import pathExists from 'path-exists'
 import loadJsonFile from 'load-json-file'
+import template from './template'
 
 const isPkg = filepath => basename(filepath) === 'package.json'
 
@@ -11,7 +11,7 @@ export default class UseConfig {
     this.options = Object.assign(
       {
         cwd: process.cwd(),
-        files: ['{name}.config.js', 'package.json'],
+        files: ['[name].config.js', 'package.json'],
         fallbackLoader(filepath) {
           return this.sync
             ? loadJsonFile.sync(filepath)
@@ -61,7 +61,7 @@ export default class UseConfig {
 
     for (const [index, _filename] of this.options.files.entries()) {
       const isLast = index === this.options.files.length - 1
-      const filename = pupa(_filename, { name: this.options.name })
+      const filename = template(_filename, { name: this.options.name })
       const filepath = resolve(this.options.cwd, filename)
 
       if (!await pathExists(filepath)) {
@@ -98,7 +98,7 @@ export default class UseConfig {
     const loaderContext = this.getLoaderContext({ sync: true })
     for (const [index, _filename] of this.options.files.entries()) {
       const isLast = index === this.options.files.length - 1
-      const filename = pupa(_filename, { name: this.options.name })
+      const filename = template(_filename, { name: this.options.name })
       const filepath = resolve(this.options.cwd, filename)
       if (!fs.existsSync(filepath)) {
         if (isLast) {
